@@ -30,15 +30,31 @@ app.post('/', (req, res) => {
   console.log(JSON.stringify(req.body, null, 2));
   res.write('Processing message...\n');
 
-  const childProcess = require('child_process');  // Added this line here, not in the main execution block
+  const waAccessToken = process.env.WA_ACCESS_TOKEN;
+  const url = `https://graph.facebook.com/v22.0/843764115476151/messages`;
+  const headers = {
+    'Authorization': `Bearer ${waAccessToken}`,
+    'Content-Type': 'application/json'
+  };
 
-  // Removed unnecessary require statement
-  childProcess.execSync(
-    `curl -i -X POST 'https://graph.facebook.com/v22.0/843764115476151/messages' -H 'Authorization: Bearer ${process.env.WA_ACCESS_TOKEN}' -H 'Content-Type: application/json' -d '{"messaging_product": "whatsapp", "to": "5511993094820", "type": "template", "template": {"name": "hello_world", "language": {"code": "en_US"}}'`
-  );
+  const data = {
+    'messaging_product': 'whatsapp',
+    'to': '5511993094820',
+    'type': 'template',
+    'template': {
+      'name': 'hello_world',
+      'language': {
+        'code': 'en_US'
+      }
+    }
+  };
+
+  fetch(url, { method: 'POST', headers, body: JSON.stringify(data) })
+    .then(response => response.json())
+    .then(data => console.log(`Response received ${new Date().toISOString().replace('T', ' ').slice(0, 19)}`))
+    .catch(error => console.error(error));
 
   res.end('\n'.repeat(100) + '\n\n');  // corrected newline at the end
-
   res.status(200).end();
 });
 
