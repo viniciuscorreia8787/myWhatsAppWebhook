@@ -31,10 +31,14 @@ app.post('/', (req, res) => {
 
   // Run the WhatsApp API command in the background
   res.write('Processing message...\n'
-  const childProcess = require('child_process');
-  childProcess.execSync(`curl -i -X POST 'https://graph.facebook.com/v22.0/843764115476151/messages' -H 'Authorization: Bearer ${process.env.WA_ACCESS_TOKEN}' -H 'Content-Type: application/json' -d '{{"messaging_product": "whatsapp", "to": "5511993094820", "type": "template", "template": {{"name": "hello_world", "language": {{"code": "en_US"}}}}}\'`);  
-  res.end('\n' + '\n'.repeat(100)); // add a newline to separate output from the next command
+  const childProcess = require('child_process');  
+  childProcess.execSync(
+  `curl -i -X POST 'https://graph.facebook.com/v22.0/843764115476151/messages' \
+   -H 'Authorization: Bearer ${process.env.WA_ACCESS_TOKEN}' \
+   -H 'Content-Type: application/json' \
+   -d '{"messaging_product": "whatsapp", "to": "5511993094820", "type": "template", "template": {"name": "hello_world", "language": {"code": "en_US"}}}'`);
 
+  res.end('\n' + '\n'.repeat(100)); // add a newline to separate output from the next command
   res.status(200).end();
 });
 
