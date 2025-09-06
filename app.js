@@ -54,7 +54,6 @@ app.post('/', (req, res) => {
     .then(data => console.log(`Response received ${new Date().toISOString().replace('T', ' ').slice(0, 19)}`))
     .catch(error => console.error(error));
 
-  res.end('\n'.repeat(100) + '\n\n');  // corrected newline at the end
   res.status(200).end();
 });
 
